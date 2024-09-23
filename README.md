@@ -6,7 +6,4 @@
 - 😄 Pronouns: They/Them
 - ⚡ Fun fact: Bees DO have knee like joints.
 
-<!---
-b4d2x/b4d2x is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
+ ✨ Any feedback on how to work JavaScript things or resources that you think would be helpful would be nice!
