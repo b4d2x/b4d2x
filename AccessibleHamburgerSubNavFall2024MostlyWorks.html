@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Accessible hamburger menu/side nav</title>
+	<link rel="stylesheet" type="text/css" href="http://ncamftp.wgbh.org/sp/sp.css" />
+	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+
+	<style type="text/css">
+		button{background: none;
+			border:0;
+			font-size: 2em;}
+			*:focus{outline: 3px solid #EB4436; outline-offset: 1px;}
+		
+
+	#menu {
+		height: 120%; /* 100% Full-height */
+ 		width: 0; /* 0 width - change this with JavaScript */
+ 		position: fixed; /* Stay in place */
+ 		z-index: 1; /* Stay on top */
+		top: -1em; /* Stay at the top */
+  		left: 0;
+  		background-color: #590E6E; /* Black*/
+  		overflow-x: hidden; /* Disable horizontal scroll */
+  		padding-top: 60px; /* Place content 60px from the top */
+  		transition: .5s; /* 0.5 second transition effect to slide in the sidenav */}
+
+
+  #menu a, #menu button {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    font-weight: bolder;
+    color: #f1f1f1;
+    display: block;
+}
+		
+	#menu.hidden {display:none;}
+
+	#main {
+		margin-left: 0px;
+    transition: margin-left .5s;
+}
+	#maindiv {height:100vh;}
+
+
+  @media screen and (max-height: 450px) {
+  .menu {padding-top: 15px;}
+  .menu a {font-size: 25px;}
+}
+.subnavbtn{
+	text-decoration: underline !important;
+}
+.ssnavbtn{
+	text-decoration: underline !important;
+}
+
+.subnav-content.hidden {display: none;}
+
+.ssnav-content.hidden {display: none;
+}
+ul {list-style: none;}
+
+</style>
+</head>
+<body>
+	<nav>
+		<button aria-expanded="false" id="toggleMenu" aria-controls="menu" aria-label="Menu" tabindex="0">&#9776;</button>
+
+		<ul id="menu" aria-modal="true" class="hidden" >
+			<li><a href="#">Home</a></li>
+			<div class="subnav" id="subAbout">
+				<li><button aria-expanded="false" id="aboutNav" class="subnavbtn" aria-modal="true" >About</button></li>
+					<ul id="aboutNavCont" class="subnav-content hidden" aria-hidden="true" >
+						<li><a href="#">Team</a></li>
+						<li><a href="#">History</a></li>
+						<li><a href="#">Careers</a></li>
+					</ul>
+			</div>
+			<div class="subnav" id="subContact">
+				<li><button aria-expanded="false" id="contactNav" class="subnavbtn" aria-modal="true">Contact</button></li>
+					<ul id="contactNavCont"class="subnav-content hidden" aria-hidden="true">
+						
+							<li><button aria-expanded="false" id="supportNav" class="ssnavbtn">Support</button></li> 
+							<div class="ssnav" id="ssSupport">
+								<ul id="supportNavCont" class="ssnav-content hidden" aria-hidden="true" aria-modal="true">
+									<li><a href="#">Customer Support</a></li>
+									<li><a href="#">Employee Support</a></li>
+								</ul>
+						</div>
+						<li><a href="#">General Question</a></li>
+					</ul>
+			</div>
+		</ul>
+	</nav>
+
+	<div id="maindiv">
+		<main id="main" aria-hidden="false"><h1>Accessible hamburger menu/ expanding side nav</h1>
+		<p>Press the menu button located above to expose the side nav and move focus to the items. Press escape to close the menu, or click out of the nav and note that the focus is shifted back to the toggle button.</p>
+		<p>Subnavs in the menu indicate their state, and when opened and escape is pressed, only the subnavs open.</p>
+		</main>
+	</div>
+	
+	<script>
+		var toggleMenu = document.getElementById ("toggleMenu");
+		var menu = document.getElementById("menu");
+		var maindiv = document.getElementById("maindiv");
+		var exitMenu = document.getElementById("exitMenu");
+		var aboutNav = document.getElementById("aboutNav");
+		var aboutNavCont = document.getElementById("aboutNavCont");
+		var contactNav = document.getElementById("contactNav");
+		var contactNavCont = document.getElementById("contactNavCont");
+		var supportNav = document.getElementById("supportNav")
+		var supportNavCont = document.getElementById("supportNavCont");
+
+		toggleMenu.addEventListener ("click", function (e) {
+			if (toggleMenu.getAttribute("aria-expanded") === "false") openMenu ();//if the button is not expanded it will trigger the opening of the menu
+			else closeMenu ();});
+
+		aboutNav.addEventListener ("click", function (e) {
+			if (aboutNav.getAttribute("aria-expanded") === "false") openAboutNav ();//if the button is not expanded it will trigger the opening of the menu
+			else closeAboutNav ();});
+		contactNav.addEventListener ("click", function (e) {
+			if (contactNav.getAttribute("aria-expanded") === "false") openContactNav ();//if the button is not expanded it will trigger the opening of the menu
+			else closeContactNav ();});
+		supportNav.addEventListener ("click", function (e) {
+			if (supportNav.getAttribute("aria-expanded") === "false") openSupportNav ();//if the button is not expanded it will trigger the opening of the menu
+			else closeSupportNav ();});
+
+		//subSubNavBtn.addEventListener ("click", function (e){
+		//	if (subSubNavBtn.getAttribute("aria-expanded") ==="false") openSubSubNav();
+		//	else closeSubSubNav ();
+	//	});
+
+
+		menu.addEventListener ("keydown", function(e) {
+			if (e.keyCode !== 27) return true; //on enter or escape it will close the menu
+			closeMenu ();
+			toggleMenu.focus ();
+			return false;
+});
+
+		maindiv.addEventListener("click", function() {
+			if (toggleMenu.getAttribute("aria-expanded") === "true") closeMenu()
+		});
+
+		function openMenu () {
+			menu.className = "";
+			toggleMenu.setAttribute ("aria-expanded", "true");
+			document.querySelector ("#menu").focus ();//focus  the menu
+			document.getElementById("menu").style.width="250px";//expands the menu
+			document.getElementById("main").style.margin="0px 0px 0px 300px";//moves main to the side
+			document.getElementById("toggleMenu").style.margin="0px 0px 0px 300px";//moves main to the side
+			document.getElementById("main").setAttribute('aria-hidden','true');//makes main non focusable
+
+		}
+
+		function openAboutNav(){
+			aboutNavCont.className = "subnav-content"
+			aboutNav.setAttribute("aria-expanded", "true");
+			aboutNavCont.setAttribute("aria-hidden", "false")
+
+		}
+		function openContactNav(){
+			contactNavCont.className = "subnav-content"
+			contactNav.setAttribute("aria-expanded", "true");
+			contactNavCont.setAttribute("aria-hidden", "false")
+
+		}
+		function openSupportNav(){
+			supportNavCont.className = "subnav-content"
+			supportNav.setAttribute("aria-expanded", "true");
+			supportNavCont.setAttribute("aria-hidden", "false")
+
+		}
+
+		function closeMenu (){
+			menu.className = "hidden";
+			toggleMenu.setAttribute ("aria-expanded", "false");
+			document.getElementById("main").style.margin="0px 0px 0px 0px" //moves main back to original location
+			document.getElementById("toggleMenu").style.margin="0px 0px 0px 0px" //moves main back to original location
+			document.getElementById("main").removeAttribute('aria-hidden')//main becomes focusable
+			document.querySelector("button").focus();//focus goes to toggle button
+	}
+	function closeAboutNav (){
+		aboutNavCont.className = "subnav-content hidden";
+		aboutNav.setAttribute("aria-expanded", "false");
+		aboutNavCont.setAttribute("aria-hidden", "true")
+	}
+	function closeContactNav (){
+		contactNavCont.className = "subnav-content hidden";
+		contactNav.setAttribute("aria-expanded", "false");
+		contactNavCont.setAttribute("aria-hidden", "true")
+	}
+	function closeSupportNav (){
+		supportNavCont.className = "subnav-content hidden";
+		supportNav.setAttribute("aria-expanded", "false");
+		supportNavCont.setAttribute("aria-hidden", "true")
+	}
+
+
+
+
+	</script>
+
+</body>
+</html>
